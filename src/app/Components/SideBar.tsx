@@ -9,7 +9,7 @@ import { TbSquarePlus2 } from "react-icons/tb";
 import { BsFillCalendar2DateFill } from "react-icons/bs";
 import { PiNotePencil } from "react-icons/pi";
 
-const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false });
+// const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
 export default function SideBar() {
     const [click, setClicked] = useState(false);
@@ -30,7 +30,7 @@ export default function SideBar() {
             <div className="flex flex-col justify-items-start mb-10">
                 <div onClick={() => handleSelect('inbox')}
                      className={`flex items-center  px-5 py-1 border-r-2 ${selectedItem === 'inbox' ? 'bg-gray-800 border-red-900' : 'border-transparent hover:cursor-pointer'}`}>
-                    <FaInbox className='text-red-500'/>
+                    <FaInbox className="text-red-500"/>
                     <p className="ml-2">Inbox</p>
                 </div>
                 <div onClick={() => handleSelect('today')}
