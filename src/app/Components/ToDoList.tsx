@@ -1,11 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react';
 
 export default function ToDoList() {
-    const [items, setItems] = useState([]);
-    const [currentInput, setCurrentInput] = useState('');
+    const [items, setItems] = useState<string[]>([]); // Specify array of strings
+    const [currentInput, setCurrentInput] = useState<string>('');
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setCurrentInput(e.target.value);
     };
 
@@ -16,7 +16,7 @@ export default function ToDoList() {
         }
     };
 
-    const handleKeyPress = (e) => {
+    const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             handleAddItem();
@@ -24,7 +24,7 @@ export default function ToDoList() {
     };
 
     // Use a ref for the textarea to adjust its height dynamically
-    const textareaRef = React.useRef(null);
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         if (textareaRef.current) {
@@ -52,7 +52,7 @@ export default function ToDoList() {
             </div>
             <ul className="mt-4">
                 {items.map((item, index) => (
-                    <li key={index} className="text-white">
+                    <li key={index} className="text-white"> {/* Consider using a more stable key than index if possible */}
                         {item}
                     </li>
                 ))}

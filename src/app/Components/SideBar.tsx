@@ -1,24 +1,25 @@
 'use client'
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-import {FaInbox, FaCalendarDay, FaTasks } from 'react-icons/fa';
-import { BiSolidMessageRoundedDetail   } from "react-icons/bi";
+import { FaInbox, FaCalendarDay, FaTasks } from 'react-icons/fa';
+import { BiSolidMessageRoundedDetail } from "react-icons/bi";
 import { MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
-import { LuListPlus } from "react-icons/lu";
 import { TbSquarePlus2 } from "react-icons/tb";
 import { BsFillCalendar2DateFill } from "react-icons/bs";
+// Assuming PiNotePencil and LuListPlus are incorrect imports, they're commented out.
 import { PiNotePencil } from "react-icons/pi";
+import { LuListPlus } from "react-icons/lu";
 
+// Dynamic import with no server-side rendering
 // const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false });
 
 export default function SideBar() {
-    const [click, setClicked] = useState(false);
-    const [selectedItem, setSelectedItem] = useState('');
+    const [click, setClicked] = useState<boolean>(false);
+    const [selectedItem, setSelectedItem] = useState<string>('');
 
-    const handleSelect = (item: any) => {
+    const handleSelect = (item: string) => {
         if (item === 'work') {
             setClicked(!click); // Toggle expansion for work
-            // Only set work as selected if it's being expanded, not when being collapsed
             setSelectedItem(click ? '' : 'work');
         } else {
             setClicked(false); // Collapse work if another item is selected
