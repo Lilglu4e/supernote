@@ -1,92 +1,109 @@
 'use client'
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
 import { FaInbox, FaCalendarDay, FaTasks } from 'react-icons/fa';
-import { BiSolidMessageRoundedDetail } from "react-icons/bi";
-import { MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
-import { TbSquarePlus2 } from "react-icons/tb";
-import { BsFillCalendar2DateFill } from "react-icons/bs";
-// Assuming PiNotePencil and LuListPlus are incorrect imports, they're commented out.
-import { PiNotePencil } from "react-icons/pi";
-import { LuListPlus } from "react-icons/lu";
+import { BiSolidMessageRoundedDetail } from 'react-icons/bi';
+import { MdKeyboardArrowRight, MdKeyboardArrowDown } from 'react-icons/md';
+import { TbSquarePlus2, TbLayoutSidebar} from 'react-icons/tb';
+import { BsFillCalendar2DateFill } from 'react-icons/bs';
+import { PiNotePencil } from 'react-icons/pi';
+// Correct the import paths according to your project setup
 
-// Dynamic import with no server-side rendering
-// const Picker = dynamic(() => import('emoji-picker-react'), { ssr: false });
+type SidebarItem = 'inbox' | 'today' | 'tasks' | 'messages' | 'list' | 'work';
+
+const SideBarItem = ({
+  onClick,
+  isSelected,
+  icon,
+  label,
+}: {
+  onClick: () => void;
+  isSelected: boolean;
+  icon: JSX.Element;
+  label: string;
+}) => (
+  <div
+    onClick={onClick}
+    className={`flex items-center px-5 py-1 border-r-2 hover:bg-gray-700 hover:bg-opacity-50 ${
+      isSelected ? 'bg-gray-700 border-red-500' : 'border-transparent'
+    } cursor-pointer transition duration-150 ease-in-out`}
+  >
+    {icon}
+    <p className="ml-2 text-lg truncate">{label}</p>
+  </div>
+);
 
 export default function SideBar() {
-    const [click, setClicked] = useState<boolean>(false);
-    const [selectedItem, setSelectedItem] = useState<string>('');
+  const [selectedItem, setSelectedItem] = useState<SidebarItem | ''>('');
+  const [isWorkExpanded, setWorkExpanded] = useState(false);
 
-    const handleSelect = (item: string) => {
-        if (item === 'work') {
-            setClicked(!click); // Toggle expansion for work
-            setSelectedItem(click ? '' : 'work');
-        } else {
-            setClicked(false); // Collapse work if another item is selected
-            setSelectedItem(selectedItem === item ? '' : item);
-        }
-    };
-    return(
-        <div className="flex flex-col bg-gray-900 justify-items-start h-screen overflow-auto text-xs rounded-lg flex-grow-1/6 py-10">
-            <div className="flex flex-col justify-items-start mb-10">
-                <div onClick={() => handleSelect('inbox')}
-                     className={`flex items-center  px-5 py-1 border-r-2 ${selectedItem === 'inbox' ? 'bg-gray-800 border-red-900' : 'border-transparent hover:cursor-pointer'}`}>
-                    <FaInbox className="text-red-500"/>
-                    <p className="ml-2">Inbox</p>
-                </div>
-                <div onClick={() => handleSelect('today')}
-                     className={`flex items-center  px-5 py-1 border-r-2 ${selectedItem === 'today' ? 'bg-gray-800 border-red-900' : 'border-transparent hover:cursor-pointer'}`}>
-                    <FaCalendarDay className='text-red-500'/>
-                    <p className="ml-2">Today</p>
-                </div>
-                <div onClick={() => handleSelect('tasks')}
-                     className={`flex items-center  px-5 py-1 border-r-2 ${selectedItem === 'tasks' ? 'bg-gray-800 border-red-900' : 'border-transparent hover:cursor-pointer'}`}>
-                    <FaTasks  className='text-red-500'/>
-                    <p className="ml-2">Tasks</p>
-                </div>
-                <div onClick={() => handleSelect('messages')}
-                     className={`flex items-center  px-5 py-1 border-r-2 ${selectedItem === 'messages' ? 'bg-gray-800 border-red-900' : 'border-transparent hover:cursor-pointer'}`}>
-                    <BiSolidMessageRoundedDetail  className='text-red-500'/>
-                    <p className="ml-2">Messages</p>
-                </div>
-            </div>
-            <div className="flex flex-col justify-items-start mb-10">
-                <div onClick={() => handleSelect('list')}
-                     className={`flex items-center px-5 py-1 border-r-2 ${selectedItem === 'list' ? 'bg-gray-800 border-red-900' : 'border-transparent hover:cursor-pointer'}`}>
-                    <p className="">List</p>
-                    <button className='text-gray-500 pl-2'>Browse all</button>
-                    <div className={`flex flex-grow justify-end`}>
-                        <TbSquarePlus2  className='text-red-500 mr-2'/>
-                        <LuListPlus  className='text-red-500'/>
-                    </div>
-                </div>
-                <div onClick={() => handleSelect('work')}
-                     className={`flex items-center px-5 py-1 border-r-2 ${selectedItem === 'work' ? ' border-red-900' : 'border-transparent hover:cursor-pointer'}`}>
-                    {click ? (
-                        <>
-                            <MdKeyboardArrowDown className='text-red-500'/>
-                            <p className="ml-2">Work</p>
-                        </>
-                    ) : (
-                        <>
-                            <MdKeyboardArrowRight className='text-red-500'/>
-                            <p className="ml-2">Work</p>
-                        </>
-                    )}
-                </div>
-                {click && (
-                    <div className="pl-10">
-                        <div className="flex items-center">
-                            <BsFillCalendar2DateFill className='text-red-500'/>
-                            <p className="ml-2">This Week</p>
-                        </div>
-                        <div className="flex items-center">
-                            <PiNotePencil className='text-red-500'/>
-                            <p className="ml-2">Metting Notes</p>
-                        </div>
-                    </div>
-                )}
-            </div>
+  const handleSelect = (item: SidebarItem) => {
+    if (item === 'work') {
+      setWorkExpanded(!isWorkExpanded); // Toggle work section specifically
+    } else {
+      setSelectedItem(selectedItem === item ? '' : item);
+      setWorkExpanded(false); // Collapse work section if another item is selected
+    }
+  };
+
+  return (
+    <div className="flex flex-col bg-gray-900 text-white h-screen overflow-auto text-sm rounded-lg shadow-md flex-grow-1/6">
+        <div
+            className={`flex justify-end px-5 py-4 border-r-4 hover:bg-gray-700 ${
+            false ? 'bg-gray-700 border-red-500' : 'border-transparent'
+            } text-lg cursor-pointer transition duration-150 ease-in-out`}
+        >
+        <TbLayoutSidebar className="text-red-500" />
+      </div>
+      <SideBarItem
+        onClick={() => handleSelect('inbox')}
+        isSelected={selectedItem === 'inbox'}
+        icon={<FaInbox className="text-red-500" />}
+        label="Inbox"
+      />
+      <SideBarItem
+        onClick={() => handleSelect('today')}
+        isSelected={selectedItem === 'today'}
+        icon={<FaCalendarDay className="text-red-500" />}
+        label="Today"
+      />
+      <SideBarItem
+        onClick={() => handleSelect('tasks')}
+        isSelected={selectedItem === 'tasks'}
+        icon={<FaTasks className="text-red-500" />}
+        label="Tasks"
+      />
+      <SideBarItem
+        onClick={() => handleSelect('messages')}
+        isSelected={selectedItem === 'messages'}
+        icon={<BiSolidMessageRoundedDetail className="text-red-500" />}
+        label="Messages"
+      />
+      <div className={`flex items-center px-5 py-1 border-r-2 hover:bg-gray-700 hover:bg-opacity-50 ${
+           false ? 'bg-gray-700 border-red-500' : 'border-transparent'
+           } cursor-pointer transition duration-150 ease-in-out text-gray-500`}>
+        List
+      </div>
+
+      <div onClick={() => handleSelect('work')}
+           className={`px-5 py-2 cursor-pointer ${selectedItem === 'work' || isWorkExpanded ? 'bg-gray-700 border-r-4 border-red-500' : 'hover:bg-gray-700'}`}>
+        <div className="flex items-center">
+          {isWorkExpanded ? <MdKeyboardArrowDown className="text-red-500" /> : <MdKeyboardArrowRight className="text-red-500" />}
+          <p className="ml-2 text-lg">Work</p>
         </div>
-    )
+        {isWorkExpanded && (
+          <div className="pl-5">
+            <div className="flex items-center py-2">
+              <BsFillCalendar2DateFill className="text-red-500" />
+              <p className="ml-2">This Week</p>
+            </div>
+            <div className="flex items-center py-2">
+              <PiNotePencil className="text-red-500" />
+              <p className="ml-2">Meeting Notes</p>
+            </div>
+
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
