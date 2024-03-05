@@ -46,9 +46,9 @@ export default function SideBar() {
   };
 
   return (
-    <div className="flex flex-col bg-gray-900 text-white h-screen overflow-auto text-sm rounded-lg shadow-md flex-grow-1/6">
+    <div className="flex flex-col z-0 bg-gray-900 text-white h-screen overflow-auto text-sm rounded-lg shadow-md flex-grow-1/6">
         <div
-            className={`flex justify-end px-5 py-4 border-r-4 hover:bg-gray-700 ${
+            className={`flex justify-end px-5 py-4 border-r-4 ${
             false ? 'bg-gray-700 border-red-500' : 'border-transparent'
             } text-lg cursor-pointer transition duration-150 ease-in-out`}
         >

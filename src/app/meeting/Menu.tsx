@@ -21,7 +21,7 @@ export default function Menu() {
     ];
 
     return (
-        <div className="bg-gray-800 text-white rounded-xl py-1">
+        <div className="bg-gray-800 text-white rounded-xl py-3">
             <ul>
                 {options.map((option, index) => (
                     <li key={index} className="flex p-1 items-center hover:bg-gray-500 hover:cursor-pointer">

@@ -36,9 +36,6 @@ export default function ToDoList() {
 
     return (
         <div className="flex flex-col bg-gray-900 justify-items-start h-screen overflow-auto text-xs rounded-lg flex-grow-3/6 p-10 mx-2">
-            {/* <div>
-                
-            </div> */}
             <div className="flex">
                 <p className="text-xl text-white">Inbox</p>
             </div>
