@@ -1,5 +1,5 @@
-import React from "react";
-import { FaCheck, FaParagraph, FaFileImage } from "react-icons/fa"; // Corrected Fa6 to Fa and import path based on standard react-icons usage
+import React, { useRef, useEffect, useState } from "react";
+import { FaCheck, FaParagraph, FaFileImage } from "react-icons/fa";
 import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu";
 import { RxDividerHorizontal } from "react-icons/rx";
 import { MdFormatListBulleted } from "react-icons/md";
@@ -7,6 +7,9 @@ import { TiAttachmentOutline } from "react-icons/ti";
 import { TbListNumbers } from "react-icons/tb";
 
 export default function Menu() {
+    // const [isVisible, setIsVisible] = useState(true); // Assuming you want to control the visibility
+
+
     const options = [
         { name: "Task", icon: <FaCheck /> },
         { name: "Paragraph", icon: <FaParagraph /> },
@@ -15,11 +18,12 @@ export default function Menu() {
         { name: "Heading 3", icon: <LuHeading3 /> },
         { name: "Divider", icon: <RxDividerHorizontal /> },
         { name: "Bullet list", icon: <MdFormatListBulleted /> },
-        { name: "Numbered list", icon: <TbListNumbers /> }, // Assuming you use the same icon for demonstration
+        { name: "Numbered list", icon: <TbListNumbers /> },
         { name: "Image", icon: <FaFileImage /> },
         { name: "Attachment", icon: <TiAttachmentOutline /> },
     ];
 
+    // Use the isVisible state to control the rendering of the menu
     return (
         <div className="bg-gray-800 text-white rounded-xl py-3">
             <ul>
@@ -33,5 +37,5 @@ export default function Menu() {
                 ))}
             </ul>
         </div>
-    );
+    )
 }

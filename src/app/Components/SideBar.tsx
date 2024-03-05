@@ -54,12 +54,14 @@ export default function SideBar() {
         >
         <TbLayoutSidebar className="text-red-500" />
       </div>
-      <SideBarItem
-        onClick={() => handleSelect('inbox')}
-        isSelected={selectedItem === 'inbox'}
-        icon={<FaInbox className="text-red-500" />}
-        label="Inbox"
-      />
+      <a href='./meeting'>
+            <SideBarItem
+              onClick={() => handleSelect('inbox')}
+              isSelected={selectedItem === 'inbox'}
+              icon={<FaInbox className="text-red-500" />}
+              label="Inbox"
+            />
+      </a>
       <SideBarItem
         onClick={() => handleSelect('today')}
         isSelected={selectedItem === 'today'}
