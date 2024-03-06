@@ -1,7 +1,7 @@
 import SideBar from "./Components/SideBar"
 import Tasks from "./Components/Tasks"
 import ToDoList from './Components/ToDoList'
-
+//page
 export default function Home() {
   return (
     <main className="flex flex-row bg-black min-h-screen items-center justify-between">
