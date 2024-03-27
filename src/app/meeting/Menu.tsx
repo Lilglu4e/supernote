@@ -6,7 +6,7 @@ import { MdFormatListBulleted } from "react-icons/md";
 import { TiAttachmentOutline } from "react-icons/ti";
 import { TbListNumbers } from "react-icons/tb";
 
-export default function Menu() {
+export default function Menu({onSelect}) {
     // const [isVisible, setIsVisible] = useState(true); // Assuming you want to control the visibility
 
 
@@ -25,10 +25,12 @@ export default function Menu() {
 
     // Use the isVisible state to control the rendering of the menu
     return (
-        <div className="bg-gray-800 text-white rounded-xl py-3">
+        <div className="bg-gray-800 text-white rounded-xl py-3 text-lg">
             <ul>
                 {options.map((option, index) => (
-                    <li key={index} className="flex p-1 items-center hover:bg-gray-500 hover:cursor-pointer">
+                    <li key={index} className="flex p-1 items-center hover:bg-gray-500 hover:cursor-pointer"
+                        onClick={() => onSelect(option.name)} // Add this line
+                    >
                         <div className="text-gray-700">
                             {option.icon}
                         </div>
@@ -37,5 +39,5 @@ export default function Menu() {
                 ))}
             </ul>
         </div>
-    )
+    );
 }

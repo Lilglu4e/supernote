@@ -1,74 +1,60 @@
-'use client'
-import React, { useState, useEffect, useRef, ChangeEvent, KeyboardEvent } from 'react';
-import { FaArrowRotateLeft } from "react-icons/fa6";
-import Menu from "./Menu";
-import { LuBoxSelect } from "react-icons/lu";
+import React, { useState, useRef, useEffect } from 'react';
+import Menu from './Menu';
+import { LuBoxSelect } from 'react-icons/lu';
 
 export default function Editor() {
-    // const [showMenu, setShowMenu] = useState(false);
-    // const iconRef = useRef(null);
+  const [currentInput, setCurrentInput] = useState('');
+  const [selectedFormat, setSelectedFormat] = useState('Paragraph');
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const textareaRef = useRef(null);
 
-    // const toggleMenu = () => {
-    //     setShowMenu(!showMenu);
-    // };
-const [items, setItems] = useState<string[]>([]);
-    const [currentInput, setCurrentInput] = useState<string>('');
-    const [isMenuVisible, setIsMenuVisible] = useState(false); // Step 1: Menu visibility state
+  const handleFormatSelect = (format) => {
+    setSelectedFormat(format); // Update the selected format
+  };
 
-    const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        setCurrentInput(e.target.value);
-    };
+  const toggleMenuVisibility = () => setIsMenuVisible(!isMenuVisible);
 
-    const handleAddItem = () => {
-        if (currentInput.trim() !== '') {
-            setItems([...items, currentInput]);
-            setCurrentInput('');
-        }
-    };
+  // Adjust textarea height based on its content
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = '0px'; // Reset height to recalculate
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set to scroll height
+    }
+  }, [currentInput]);
 
-    const handleKeyPress = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleAddItem();
-        }
-    };
+  const formatColors = {
+    'Task': `flex items-start text-lg bg-red-100`,
+    'Paragraph': `flex items-start text-lg bg-red-200`,
+    'Heading 1': 'flex items-start text-2xl bg-green-300',
+    'Heading 2': 'flex items-start text-lg bg-blue-400',
+    'Heading 3': 'flex items-start text-lg bg-yellow-500',
+    'Divider': `flex items-start text-lg bg-red-600`,
+    'Bullet List': 'flex items-start text-lg bg-purple-700',
+    'Numbered List': `flex items-start text-lg bg-red-800`,
+    'Image': `flex items-start text-lg bg-red-900`,
+    'Attachment': `flex items-start text-lg bg-blue-500`,
+  };
 
-    // Step 2: Toggle function for Menu visibility
-    const toggleMenuVisibility = () => setIsMenuVisible(!isMenuVisible);
+  const bgColor = formatColors[selectedFormat] || ''; // Fallback to an empty string if the format isn't found
 
-    const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-    useEffect(() => {
-        if (textareaRef.current) {
-            textareaRef.current.style.height = '0px';
-            textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-        }
-    }, [currentInput]);
-    return (
-        // <div style={{ position: 'relative' }} className="flex items-center p-2">
-        //     {showMenu && <div className="absolute top-[-100px] left-[-120px] z-[1000]"><Menu /></div>}
-        //     <div ref={iconRef} onClick={toggleMenu} className="cursor-pointer mr-2">
-        //         <FaArrowRotateLeft />
-        //     </div>
-        // </div>
-      <div className='flex items-start text-lg'>
-          <div className='relative pt-1'> {/* Positioning container */}
-              {isMenuVisible && (
-              <div className="absolute left-0 transform -translate-x-full mt-1 w-40">
-                  <Menu />
-              </div>
-              )}
-              <LuBoxSelect className='text-xl text-white' onClick={toggleMenuVisibility}/>
+  return (
+    <div className={`${bgColor}`}>
+      <div className='relative pt-1'>
+        {isMenuVisible && (
+          <div className="absolute left-0 transform -translate-x-full mt-1 w-40">
+            <Menu onSelect={handleFormatSelect} />
           </div>
-          <textarea
-              ref={textareaRef}
-              value={currentInput}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyPress}
-              className="flex-1 text-lg items-center text-white bg-transparent rounded-md border-none outline-none resize-none ml-2"
-              placeholder="Add a new item"
-              style={{ overflowY: 'hidden', minHeight: '20px' }}
-          ></textarea>
+        )}
+        <LuBoxSelect className='text-xl text-white cursor-pointer' onClick={toggleMenuVisibility} />
       </div>
-    );
+      <textarea
+        ref={textareaRef}
+        value={currentInput}
+        onChange={(e) => setCurrentInput(e.target.value)}
+        className="flex-1 text-white bg-transparent rounded-md border-none outline-none resize-none ml-2"
+        placeholder="Add a new item"
+        style={{ overflowY: 'hidden', minHeight: '20px' }}
+      ></textarea>
+    </div>
+  );
 }
