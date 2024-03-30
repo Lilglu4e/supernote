@@ -6,6 +6,7 @@ import { MdFormatListBulleted } from "react-icons/md";
 import { TiAttachmentOutline } from "react-icons/ti";
 import { TbListNumbers } from "react-icons/tb";
 
+
 export default function Menu({onSelect}) {
     // const [isVisible, setIsVisible] = useState(true); // Assuming you want to control the visibility
 

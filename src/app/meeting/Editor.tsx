@@ -1,14 +1,29 @@
+'use client'
 import React, { useState, useRef, useEffect } from 'react';
 import Menu from './Menu';
-import { LuBoxSelect } from 'react-icons/lu';
+import { FaCheck, FaParagraph, FaFileImage } from "react-icons/fa";
+import { LuHeading1, LuHeading2, LuHeading3 } from "react-icons/lu";
+import { RxDividerHorizontal } from "react-icons/rx";
+import { MdFormatListBulleted } from "react-icons/md";
+import { TiAttachmentOutline } from "react-icons/ti";
+import { TbListNumbers } from "react-icons/tb";
+import { LuBoxSelect as DefaultIcon } from 'react-icons/lu';
+
+type FormatColorType = {
+  [key: string]: string; // This says each key is a string and maps to a string value
+};
+
+type FormatIconMapType = {
+  [key: string]: React.ElementType;
+}
 
 export default function Editor() {
-  const [currentInput, setCurrentInput] = useState('');
+  const [currentInput, setCurrentInput] = useState<string>('');
   const [selectedFormat, setSelectedFormat] = useState('Paragraph');
   const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const textareaRef = useRef(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleFormatSelect = (format) => {
+  const handleFormatSelect = (format: any) => {
     setSelectedFormat(format); // Update the selected format
   };
 
@@ -22,20 +37,37 @@ export default function Editor() {
     }
   }, [currentInput]);
 
-  const formatColors = {
-    'Task': `flex items-start text-lg bg-red-100`,
-    'Paragraph': `flex items-start text-lg bg-red-200`,
+  const formatColors: FormatColorType = {
+    'Task': 'flex items-start text-lg bg-red-100',
+    'Paragraph': 'flex items-start text-lg bg-red-200',
     'Heading 1': 'flex items-start text-2xl bg-green-300',
     'Heading 2': 'flex items-start text-lg bg-blue-400',
     'Heading 3': 'flex items-start text-lg bg-yellow-500',
-    'Divider': `flex items-start text-lg bg-red-600`,
+    'Divider': 'flex items-start text-lg bg-red-600',
     'Bullet List': 'flex items-start text-lg bg-purple-700',
-    'Numbered List': `flex items-start text-lg bg-red-800`,
-    'Image': `flex items-start text-lg bg-red-900`,
-    'Attachment': `flex items-start text-lg bg-blue-500`,
+    'Numbered List': 'flex items-start text-lg bg-red-800',
+    'Image': 'flex items-start text-lg bg-red-900',
+    'Attachment': 'flex items-start text-lg bg-blue-500',
   };
 
   const bgColor = formatColors[selectedFormat] || ''; // Fallback to an empty string if the format isn't found
+
+  // Map your formats to the respective icons
+  const iconMap: FormatIconMapType =  {
+    'Task': FaCheck,
+    'Paragraph': FaParagraph,
+    'Heading 1': LuHeading1,
+    'Heading 2': LuHeading2,
+    'Heading 3': LuHeading3,
+    'Divider': RxDividerHorizontal,
+    'Bullet List': MdFormatListBulleted, // Corrected to match the formatColors keys
+    'Numbered List': TbListNumbers, // Corrected to match the formatColors keys
+    'Image': FaFileImage,
+    'Attachment': TiAttachmentOutline,
+  };
+
+  // Dynamically select the icon component based on the selected format
+  const IconComponent = iconMap[selectedFormat] || DefaultIcon; // Directly use DefaultIcon as fallback
 
   return (
     <div className={`${bgColor}`}>
@@ -45,7 +77,7 @@ export default function Editor() {
             <Menu onSelect={handleFormatSelect} />
           </div>
         )}
-        <LuBoxSelect className='text-xl text-white cursor-pointer' onClick={toggleMenuVisibility} />
+        <IconComponent className='text-xl text-white cursor-pointer' onClick={toggleMenuVisibility} />
       </div>
       <textarea
         ref={textareaRef}
