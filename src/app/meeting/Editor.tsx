@@ -38,16 +38,16 @@ export default function Editor() {
   }, [currentInput]);
 
   const formatColors: FormatColorType = {
-    'Task': 'flex items-start text-lg bg-red-100',
-    'Paragraph': 'flex items-start text-lg bg-red-200',
-    'Heading 1': 'flex items-start text-2xl bg-green-300',
-    'Heading 2': 'flex items-start text-lg bg-blue-400',
-    'Heading 3': 'flex items-start text-lg bg-yellow-500',
-    'Divider': 'flex items-start text-lg bg-red-600',
-    'Bullet List': 'flex items-start text-lg bg-purple-700',
-    'Numbered List': 'flex items-start text-lg bg-red-800',
-    'Image': 'flex items-start text-lg bg-red-900',
-    'Attachment': 'flex items-start text-lg bg-blue-500',
+    'Task': 'flex items-start text-lg',
+    'Paragraph': 'flex items-start text-sm',
+    'Heading 1': 'flex items-start text-2xl',
+    'Heading 2': 'flex items-start text-lg',
+    'Heading 3': 'flex items-start text-lg',
+    'Divider': 'flex items-start text-lg',
+    'Bullet List': 'flex items-start text-l',
+    'Numbered List': 'flex items-start text-lg',
+    'Image': 'flex items-start text-lg',
+    'Attachment': 'flex items-start text-lg',
   };
 
   const bgColor = formatColors[selectedFormat] || ''; // Fallback to an empty string if the format isn't found
@@ -70,23 +70,26 @@ export default function Editor() {
   const IconComponent = iconMap[selectedFormat] || DefaultIcon; // Directly use DefaultIcon as fallback
 
   return (
-    <div className={`${bgColor}`}>
-      <div className='relative pt-1'>
-        {isMenuVisible && (
+    <div className={`${bgColor} w-full`}> {/* Outer div to ensure full width and padding */}
+      <div className='flex items-start relative w-full'> {/* Flex container with icon and textarea aligned at the start */}
+      {isMenuVisible && (
           <div className="absolute left-0 transform -translate-x-full mt-1 w-40">
             <Menu onSelect={handleFormatSelect} />
           </div>
         )}
-        <IconComponent className='text-xl text-white cursor-pointer' onClick={toggleMenuVisibility} />
+        <IconComponent className='text-xl text-white cursor-pointer mr-2' onClick={toggleMenuVisibility} />
+        {/* Optional: Additional div for complex layouts. Remove if unnecessary. */}
+        <div className='flex-1'>
+          <textarea
+            ref={textareaRef}
+            value={currentInput}
+            onChange={(e) => setCurrentInput(e.target.value)}
+            className="w-full text-white bg-transparent rounded-md border-none outline-none resize-none"
+            placeholder="Add a new item"
+            style={{ overflowY: 'hidden', minHeight: '20px' }}
+          ></textarea>
+        </div>
       </div>
-      <textarea
-        ref={textareaRef}
-        value={currentInput}
-        onChange={(e) => setCurrentInput(e.target.value)}
-        className="flex-1 text-white bg-transparent rounded-md border-none outline-none resize-none ml-2"
-        placeholder="Add a new item"
-        style={{ overflowY: 'hidden', minHeight: '20px' }}
-      ></textarea>
     </div>
   );
 }
