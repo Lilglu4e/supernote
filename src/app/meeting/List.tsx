@@ -52,6 +52,7 @@ export default function ToDoList() {
                     Meeting Notes
                 </h1>
                 <Editor />
+                <Editor />
             </div>
         </div>
     );

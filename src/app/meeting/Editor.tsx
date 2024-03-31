@@ -19,7 +19,7 @@ type FormatIconMapType = {
 
 export default function Editor() {
   const [currentInput, setCurrentInput] = useState<string>('');
-  const [selectedFormat, setSelectedFormat] = useState('Paragraph');
+  const [selectedFormat, setSelectedFormat] = useState('Heading 1');
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -39,9 +39,9 @@ export default function Editor() {
 
   const formatColors: FormatColorType = {
     'Task': 'flex items-start text-lg',
-    'Paragraph': 'flex items-start text-sm',
+    'Paragraph': 'flex items-start text-md',
     'Heading 1': 'flex items-start text-2xl',
-    'Heading 2': 'flex items-start text-lg',
+    'Heading 2': 'flex items-start text-xl',
     'Heading 3': 'flex items-start text-lg',
     'Divider': 'flex items-start text-lg',
     'Bullet List': 'flex items-start text-l',
