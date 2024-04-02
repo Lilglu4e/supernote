@@ -21,6 +21,7 @@ export default function Editor() {
   const [currentInput, setCurrentInput] = useState<string>('');
   const [selectedFormat, setSelectedFormat] = useState('Heading 1');
   const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [isHovered, setIsHovered] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleFormatSelect = (format: any) => {
@@ -28,7 +29,7 @@ export default function Editor() {
   };
 
   const toggleMenuVisibility = () => setIsMenuVisible(!isMenuVisible);
-
+  const hanldeIsHovered = () => setIsHovered(!isHovered)
   // Adjust textarea height based on its content
   useEffect(() => {
     if (textareaRef.current) {
@@ -70,14 +71,16 @@ export default function Editor() {
   const IconComponent = iconMap[selectedFormat] || DefaultIcon; // Directly use DefaultIcon as fallback
 
   return (
-    <div className={`${bgColor} w-full`}> {/* Outer div to ensure full width and padding */}
+    <div className={`${bgColor} w-full`} onMouseEnter={hanldeIsHovered} onMouseLeave={hanldeIsHovered}> {/* Outer div to ensure full width and padding */}
       <div className='flex items-start relative w-full'> {/* Flex container with icon and textarea aligned at the start */}
       {isMenuVisible && (
           <div className="absolute left-0 transform -translate-x-full mt-1 w-40">
-            <Menu onSelect={handleFormatSelect} />
+            <Menu onSelect={handleFormatSelect}/>
           </div>
         )}
-        <IconComponent className='text-xl text-white cursor-pointer mr-2' onClick={toggleMenuVisibility} />
+        <IconComponent className={`text-xl cursor-pointer mr-2 ${isHovered ? 'text-blue-500' : 'text-transparent'}` }
+          onClick={toggleMenuVisibility} 
+        />
         {/* Optional: Additional div for complex layouts. Remove if unnecessary. */}
         <div className='flex-1'>
           <textarea
