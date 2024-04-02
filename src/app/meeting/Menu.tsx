@@ -17,7 +17,7 @@ interface MenuOption {
   icon: JSX.Element;
 }
 
-const Menu: React.FC<MenuProps> = ({ onSelect }) => {
+const Menu = ({ onSelect, menuSelectionIndex }) => {
   // Option structure is now enforced by TypeScript
   const options: MenuOption[] = [
     { name: "Task", icon: <FaCheck /> },
@@ -36,8 +36,8 @@ const Menu: React.FC<MenuProps> = ({ onSelect }) => {
     <div className="bg-gray-800 text-white rounded-xl py-3 text-lg">
       <ul>
         {options.map((option, index) => (
-          <li key={index} className="flex p-1 items-center hover:bg-gray-500 hover:cursor-pointer"
-              onClick={() => onSelect(option.name)}
+          <li key={index} className={`flex p-1 items-center hover:cursor-pointer ${index === menuSelectionIndex ? 'bg-gray-500' : ''}`} 
+            onClick={() => onSelect(option.name)}
           >
             <div className="text-gray-700">
               {option.icon}

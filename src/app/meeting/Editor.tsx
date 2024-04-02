@@ -17,19 +17,49 @@ type FormatIconMapType = {
   [key: string]: React.ElementType;
 }
 
+
 export default function Editor() {
   const [currentInput, setCurrentInput] = useState<string>('');
-  const [selectedFormat, setSelectedFormat] = useState('Heading 1');
+  const [selectedFormat, setSelectedFormat] = useState('Paragraph');
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [isHovered, setIsHovered] = useState(false)
+  const [menuSelectionIndex, setMenuSelectionIndex] = useState(0); // Added state for tracking current menu selection
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleFormatSelect = (format: any) => {
-    setSelectedFormat(format); // Update the selected format
+
+  const handleFormatSelect = (format: string) => {
+    setSelectedFormat(format);
+    setIsMenuVisible(false); // Hide the menu after selection
+    setMenuSelectionIndex(0); // Reset selection index
+    textareaRef.current?.focus(); // Focus back to the textarea
   };
 
-  const toggleMenuVisibility = () => setIsMenuVisible(!isMenuVisible);
-  const hanldeIsHovered = () => setIsHovered(!isHovered)
+  const toggleMenuVisibility = () => {
+    setIsMenuVisible(!isMenuVisible);
+    setMenuSelectionIndex(0); // Reset the menu selection index whenever the menu visibility changes
+  };
+
+  const cycleMenuSelection = (direction: 'next' | 'prev') => {
+    setMenuSelectionIndex(prevIndex => {
+      const nextIndex = direction === 'next' ? prevIndex + 1 : prevIndex - 1;
+      return (nextIndex + menuOptions.length) % menuOptions.length; // Ensure the index wraps around
+    });
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === '/' && !isMenuVisible) {
+      e.preventDefault();
+      toggleMenuVisibility();
+    } else if (isMenuVisible) {
+      if (e.key === 'Enter'|| e.key === '/') {
+        e.preventDefault();
+        handleFormatSelect(menuOptions[menuSelectionIndex]);
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        cycleMenuSelection(e.key === 'ArrowDown' ? 'next' : 'prev');
+      }
+    }
+  };
   // Adjust textarea height based on its content
   useEffect(() => {
     if (textareaRef.current) {
@@ -50,6 +80,7 @@ export default function Editor() {
     'Image': 'flex items-start text-lg',
     'Attachment': 'flex items-start text-lg',
   };
+  const menuOptions = Object.keys(formatColors); // Assuming this matches your Menu component's options
 
   const bgColor = formatColors[selectedFormat] || ''; // Fallback to an empty string if the format isn't found
 
@@ -71,11 +102,11 @@ export default function Editor() {
   const IconComponent = iconMap[selectedFormat] || DefaultIcon; // Directly use DefaultIcon as fallback
 
   return (
-    <div className={`${bgColor} w-full`} onMouseEnter={hanldeIsHovered} onMouseLeave={hanldeIsHovered}> {/* Outer div to ensure full width and padding */}
+    <div className={`${bgColor} w-full`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} onKeyDown={handleKeyPress}> {/* Adjusted hover handlers for clarity */}
       <div className='flex items-start relative w-full'> {/* Flex container with icon and textarea aligned at the start */}
       {isMenuVisible && (
           <div className="absolute left-0 transform -translate-x-full mt-1 w-40">
-            <Menu onSelect={handleFormatSelect}/>
+            <Menu onSelect={handleFormatSelect} menuSelectionIndex={menuSelectionIndex} />
           </div>
         )}
         <IconComponent className={`text-xl cursor-pointer mr-2 ${isHovered ? 'text-blue-500' : 'text-transparent'}` }
@@ -88,7 +119,7 @@ export default function Editor() {
             value={currentInput}
             onChange={(e) => setCurrentInput(e.target.value)}
             className="w-full text-white bg-transparent rounded-md border-none outline-none resize-none"
-            placeholder="Add a new item"
+            placeholder="Start typing, or type '/' to choose a different content type"
             style={{ overflowY: 'hidden', minHeight: '20px' }}
           ></textarea>
         </div>
