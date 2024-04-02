@@ -35,7 +35,7 @@ export default function Editor() {
       textareaRef.current.style.height = '0px'; // Reset height to recalculate
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set to scroll height
     }
-  }, [currentInput]);
+  }, [currentInput, selectedFormat, textareaRef]);
 
   const formatColors: FormatColorType = {
     'Task': 'flex items-start text-lg',
