@@ -6,18 +6,16 @@ import { MdFormatListBulleted } from "react-icons/md";
 import { TiAttachmentOutline } from "react-icons/ti";
 import { TbListNumbers } from "react-icons/tb";
 
-// Define the props for the Menu component
 interface MenuProps {
   onSelect: (format: string) => void;
+  menuSelectionIndex: number; // Added this line
 }
-
-// Define the structure of each option in the options array
 interface MenuOption {
   name: string;
   icon: JSX.Element;
 }
 
-const Menu = ({ onSelect, menuSelectionIndex }) => {
+const Menu: React.FC<MenuProps> = ({ onSelect, menuSelectionIndex }) => {
   // Option structure is now enforced by TypeScript
   const options: MenuOption[] = [
     { name: "Task", icon: <FaCheck /> },
