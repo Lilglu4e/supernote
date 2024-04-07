@@ -109,7 +109,7 @@ export default function Editor() {
             <Menu onSelect={handleFormatSelect} menuSelectionIndex={menuSelectionIndex} />
           </div>
         )}
-        <IconComponent className={`text-xl cursor-pointer mr-2 ${isHovered ? 'text-blue-500' : 'text-transparent'}` }
+        <IconComponent className={`text-xl cursor-pointer mr-2 ${isHovered ? 'text-white' : 'text-transparent'}` }
           onClick={toggleMenuVisibility} 
         />
         {/* Optional: Additional div for complex layouts. Remove if unnecessary. */}
